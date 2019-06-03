@@ -5,7 +5,7 @@ import datetime
 
 def dailycount(Name):
     dt = datetime.datetime.now()
-    today=(dt - datetime.timedelta(2)).strftime('%Y%m%d')+"00"
+    today=(dt - datetime.timedelta(1)).strftime('%Y%m%d')+"00"
     Name=Name.replace(" ","_")
 
     URL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/{}/daily/{}/{}".format(Name,today,today)
