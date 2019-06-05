@@ -1,7 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import difflib
 import csv
 import requests
 import datetime
+
 
 
 
@@ -19,8 +23,7 @@ with open("myfile.csv") as fd:
 def is_similar(first, second, ratio):
     return difflib.SequenceMatcher(None, first, second).ratio() > ratio
 
-
-input = ['aleander fleming']
+input = ['Nguyn Minh Trit']
 
 result = [s for f in input for s in mylist if is_similar(f,s, 0.8)]
 
@@ -36,7 +39,8 @@ def dailycount(Name):
     data = r.json()
     return(data['items'][0]['views'])
 
-dailycount(result[0])
+
+print(result[0])
 
 """with open('myfile.csv', 'w') as myfile:
     wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
