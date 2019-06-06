@@ -13,7 +13,7 @@ def spellCheck(input):
             for a in row:
                 mylist.append(a)
 
-    result = [s for f in input for s in mylist if is_similar(f,s, 0.8)]
+    result = [s for f in input for s in mylist if is_similar(f,s, 0.7)]
     try:
         return(result[0])
     except:
@@ -47,4 +47,7 @@ def count(Name):
 
 
 
-print(count('Narera Modi'))
+print(count('Narendra Modi'))
+print(count('Ariana Grande'))
+print(count('Donald Trump'))
+print(count('Nikola Tesla'))
