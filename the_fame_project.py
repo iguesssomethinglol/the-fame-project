@@ -14,13 +14,17 @@ def spellCheck(input):
                 mylist.append(a)
 
     result = [s for f in input for s in mylist if is_similar(f,s, 0.8)]
-    return(result[0])
+    try:
+        return(result[0])
+    except:
+        return(input[0])  #corrects spelling from database, returns input if it's unable if similar name doesn't exist in database
 
 def count(Name):
     dt = datetime.datetime.now()
     month=(dt - datetime.timedelta(31)).strftime('%Y%m%d')+"00"
     today=(dt - datetime.timedelta(1)).strftime('%Y%m%d')+"00"
     Name=Name.replace(" ","_")
+    Name=spellCheck([Name])
 
     URL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/{}/daily/{}/{}".format(Name,month,today)
     r = requests.get(url = URL)
@@ -39,8 +43,8 @@ def count(Name):
             for x in data['items'][-7:]:
                 sum+=x['views']
             return(sum)
-    return([views(data, "daily"),views(data, "weekly"),views(data, "monthly")]) #Returns an array of pageviews[daily,weekly,monthly]
+    return([views(data, "daily"),views(data, "weekly"),views(data, "monthly")]) #Returns an array of no. of pageviews[daily,weekly,monthly]
 
 
 
-print(count(spellCheck(['Narendr Mod'])))
+print(count('Narera Modi'))
