@@ -1,24 +1,20 @@
 
-import requests
-import datetime
+import requests,datetime,csv,difflib
 
 
 
-def views(data,duration=""):
-    sum=0
-    if(duration is "monthly"):
-        for x in data['items']:
-            sum+=x['views']
-        return(sum)
+def spellCheck(input):
+    def is_similar(first, second, ratio):
+        return difflib.SequenceMatcher(None, first, second).ratio() > ratio
+    mylist=[]
+    with open("myfile.csv") as fd:
+        rd = csv.reader(fd)
+        for row in rd:
+            for a in row:
+                mylist.append(a)
 
-    elif(duration is "daily"):
-        return(data['items'][-1]['views'])
-
-    elif(duration is "weekly"):
-        for x in data['items'][-7:]:
-            sum+=x['views']
-        return(sum)
-
+    result = [s for f in input for s in mylist if is_similar(f,s, 0.8)]
+    return(result[0])
 
 def count(Name):
     dt = datetime.datetime.now()
@@ -29,9 +25,22 @@ def count(Name):
     URL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/{}/daily/{}/{}".format(Name,month,today)
     r = requests.get(url = URL)
     data = r.json()
+    def views(data,duration=""):
+        sum=0
+        if(duration is "monthly"):
+            for x in data['items']:
+                sum+=x['views']
+            return(sum)
+
+        elif(duration is "daily"):
+            return(data['items'][-1]['views'])
+
+        elif(duration is "weekly"):
+            for x in data['items'][-7:]:
+                sum+=x['views']
+            return(sum)
     return([views(data, "daily"),views(data, "weekly"),views(data, "monthly")]) #Returns an array of pageviews[daily,weekly,monthly]
 
 
 
-
-print(count("Narendra Modi"))
+print(count(spellCheck(['Narendr Mod'])))
