@@ -2,16 +2,19 @@
 import requests,datetime,csv,difflib
 
 
+global mylist
+mylist=[]
+with open("myfile.csv") as fd:
+    rd = csv.reader(fd)
+    for row in rd:
+        for a in row:
+            mylist.append(a)
+
 
 def spellCheck(input):
     def is_similar(first, second, ratio):
         return difflib.SequenceMatcher(None, first, second).ratio() > ratio
-    mylist=[]
-    with open("myfile.csv") as fd:
-        rd = csv.reader(fd)
-        for row in rd:
-            for a in row:
-                mylist.append(a)
+
 
     result = [s for f in input for s in mylist if is_similar(f,s, 0.7)]
     try:
@@ -24,7 +27,6 @@ def count(Name):
     month=(dt - datetime.timedelta(31)).strftime('%Y%m%d')+"00"
     today=(dt - datetime.timedelta(1)).strftime('%Y%m%d')+"00"
     Name=Name.replace(" ","_")
-    Name=spellCheck([Name])
 
     URL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/{}/daily/{}/{}".format(Name,month,today)
     r = requests.get(url = URL)
@@ -47,7 +49,5 @@ def count(Name):
 
 
 
-print(count('Narendra Modi'))
-print(count('Ariana Grande'))
-print(count('Donald Trump'))
-print(count('Nikola Tesla'))
+
+print(count('Wrable'))
