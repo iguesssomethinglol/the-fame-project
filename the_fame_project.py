@@ -2,31 +2,31 @@
 import requests,datetime,csv,difflib
 
 
-global mylist
-mylist=[]
-with open("myfile.csv") as fd:
-    rd = csv.reader(fd)
-    for row in rd:
-        for a in row:
-            mylist.append(a)
+def installDatabase():
+    global mylist
+    mylist=[]
+    with open("myfile.csv") as fd:
+        rd = csv.reader(fd)
+        for row in rd:
+            for a in row:
+                mylist.append(a)
+
 
 
 def spellCheck(input):
-    def is_similar(first, second, ratio):
-        return difflib.SequenceMatcher(None, first, second).ratio() > ratio
+    a=(difflib.get_close_matches(input,mylist))
+    return(a[0])
 
 
-    result = [s for f in input for s in mylist if is_similar(f,s, 0.7)]
-    try:
-        return(result[0])
-    except:
-        return(input[0])  #corrects spelling from database, returns input if it's unable if similar name doesn't exist in database
 
 def count(Name):
     dt = datetime.datetime.now()
     month=(dt - datetime.timedelta(31)).strftime('%Y%m%d')+"00"
     today=(dt - datetime.timedelta(1)).strftime('%Y%m%d')+"00"
+    if Name not in mylist:
+        Name=spellCheck(Name)
     Name=Name.replace(" ","_")
+    print(Name)
 
     URL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/{}/daily/{}/{}".format(Name,month,today)
     r = requests.get(url = URL)
@@ -49,5 +49,5 @@ def count(Name):
 
 
 
-
-print(count('Wrable'))
+installDatabase()
+count('Donald Trump')
