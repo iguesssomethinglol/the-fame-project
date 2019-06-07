@@ -9,13 +9,13 @@ def installDatabase():
         rd = csv.reader(fd)
         for row in rd:
             for a in row:
-                mylist.append(a)
+                mylist.append(a)      #loads database from csv file
 
 
 
 def spellCheck(input):
     a=(difflib.get_close_matches(input,mylist))
-    return(a[0])
+    return(a[0])                    #corrects spelling of input (if there's any mistake)
 
 
 
@@ -50,4 +50,4 @@ def count(Name):
 
 
 installDatabase()
-count('Donald Trump')
+print(count("Narendra Modi"))
