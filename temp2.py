@@ -9,7 +9,7 @@ import urllib3
 from urllib import quote
 
 
-category="American_television_actresses"
+category="Australian_male_film_actors"
 mylist=[]
 
 url="https://en.wikipedia.org/w/api.php?action=query&format=json&list=categorymembers&continue=-%7C%7C&cmtitle=Category%3A"+category+"&cmlimit=500"

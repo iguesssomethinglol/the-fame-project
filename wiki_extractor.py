@@ -35,10 +35,7 @@ with open("myfile.csv") as fd:
         for a in row:
             mylist.append(a)
 
-mylist = list(dict.fromkeys(mylist))
-for x in mylist:
-    if len(x)<=4:
-        mylist.remove(x)
+mylist.append("Christina Perri")
 
 mylist.remove("N")
 

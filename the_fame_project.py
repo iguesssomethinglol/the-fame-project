@@ -56,9 +56,9 @@ class Celebrity:
 
     def getGraphHTML(self):  # returns html code for graph of all data
         fig = plt.figure()
-        ax = fig.gca()
-        ax.plot(self._data)
-        ax.ylabel = "VIEWS"
+        a = fig.gca()
+        a.plot(self._data)
+        a.ylabel = "VIEWS"
         tmpfile = BytesIO()
         fig.savefig(tmpfile, format='png')
         encoded = base64.b64encode(tmpfile.getvalue())
@@ -69,13 +69,13 @@ class Celebrity:
 
 class Database:
     def __init__(self, location):
-        self.names=self.getDatabase(location)
+        self.members=self.getDatabase(location)
 
 
     def getDatabase(self,location):  # loads database from csv file
         global mylist
         mylist = []
-        with open("/Users/ayushsalik/the-fame-project/{}".format(location)) as fd:
+        with open(location) as fd:
             rd = csv.reader(fd)
             for row in rd:
                 for a in row:
@@ -84,6 +84,5 @@ class Database:
         return(mylist)
 
 
-database = Database("myfile.csv")
-a = Celebrity("Donald Trup")
-print(a.graph)
+database = Database("/Users/ayushsalik/the-fame-project/myfile.csv")
+a = Celebrity("Don]ajldk Trump")
