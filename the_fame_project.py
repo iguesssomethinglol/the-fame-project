@@ -1,53 +1,59 @@
+import requests,datetime,csv,difflib,matplotlib.pyplot as plt
 
-import requests,datetime,csv,difflib
+
+class Celebrity:
+    def __init__(self,data=[],name="",daily=0,weekly=0,monthly=0):
+        self.name = name
+        self.data = data
+        self.daily=daily
+        self.weekly=weekly
+        self.monthly=monthly
 
 
-def installDatabase():
+def installDatabase():#loads database from csv file
     global mylist
     mylist=[]
-    with open("myfile.csv") as fd:
+    with open("/Users/ayushsalik/the-fame-project/myfile.csv") as fd:
         rd = csv.reader(fd)
         for row in rd:
             for a in row:
-                mylist.append(a)      #loads database from csv file
+                mylist.append(a)
 
 
 
-def spellCheck(input):
+def spellCheck(input): #corrects spelling of input (if there's any mistake)
     a=(difflib.get_close_matches(input,mylist))
-    return(a[0])                    #corrects spelling of input (if there's any mistake)
+    return(a[0])
 
 
 
-def count(Name):
+def getData(name): #returns a "Celebrity" object containing various important members
     dt = datetime.datetime.now()
     month=(dt - datetime.timedelta(31)).strftime('%Y%m%d')+"00"
     today=(dt - datetime.timedelta(1)).strftime('%Y%m%d')+"00"
-    if Name not in mylist:
-        Name=spellCheck(Name)
-    Name=Name.replace(" ","_")
-    print(Name)
+    if name not in mylist:
+        name=spellCheck(name)
+    name=name.replace(" ","_")
 
-    URL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/{}/daily/{}/{}".format(Name,month,today)
+    URL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/{}/daily/{}/{}".format(name,month,today)
     r = requests.get(url = URL)
     data = r.json()
-    def views(data,duration=""):
-        sum=0
-        if(duration is "monthly"):
-            for x in data['items']:
-                sum+=x['views']
-            return(sum)
+    raw=[]
+    daily=monthly=weekly=0
+    for x in data['items']:
+        monthly+=x['views']
+        raw.append(x['views'])
+    for x in data['items'][-7:]:
+        weekly+=x['views']
+    daily=data['items'][-1]['views']
+    a=Celebrity(raw,name,daily,weekly,monthly)
+    return(a)
 
-        elif(duration is "daily"):
-            return(data['items'][-1]['views'])
 
-        elif(duration is "weekly"):
-            for x in data['items'][-7:]:
-                sum+=x['views']
-            return(sum)
-    return([views(data, "daily"),views(data, "weekly"),views(data, "monthly")]) #Returns an array of no. of pageviews[daily,weekly,monthly]
+
 
 
 
 installDatabase()
-print(count("Narendra Modi"))
+a=getData("Donald Trump")
+print(a.daily)
