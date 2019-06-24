@@ -85,5 +85,5 @@ class Database:
 
 
 database = Database("myfile.csv")
-a = Celebrity("Donald Trump")
+a = Celebrity("Donald Trup")
 print(a.graph)
